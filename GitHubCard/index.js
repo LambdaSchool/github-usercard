@@ -1,8 +1,32 @@
+import axios from 'axios'
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+const followersArray = [    
+  'pvahanian',
+  'chasingeuphoria',
+  'fatima-rizvi',
+  'dustinmyers',
+  'justsml'
+];
+
+const cards = document.querySelector('.cards')
+
+followersArray.forEach( element => {
+  axios.get(`https://api.github.com/users/${element}`)
+  .then(stuff =>{
+    cards.appendChild(gitCardMaker(stuff.data))
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
+
+
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -27,8 +51,6 @@
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
-const followersArray = [];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +80,61 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+function gitCardMaker(data) {
+
+  let {login, name, location, html_url, avatar_url, followers, following, bio} = data
+
+  const card = document.createElement('div')
+  card.classList.add('card')
+  
+  const image = document.createElement('img')
+  image.src = avatar_url
+
+  const cardInfo = document.createElement('div')
+  cardInfo.classList.add('card-info')
+
+  const names = document.createElement('h3')
+  names.classList.add('name')
+  names.textContent = `Name: ${name}`
+  // setting class names, attributes and text
+  
+  const logins = document.createElement('p')
+  logins.classList.add('username')
+  logins.textContent = `Username: ${login}`
+
+  const locations = document.createElement('p')
+  locations.textContent = `Location: ${location}`
+
+  const profile = document.createElement('p')
+  profile.textContent = `Profile:`
+  const gitAddress = document.createElement('a');
+  let linkText = document.createTextNode('Follow me!')
+  gitAddress.appendChild(linkText)
+  gitAddress.href = `${html_url}`
+  profile.appendChild(gitAddress)
+
+  const followerss = document.createElement('p')
+  followerss.textContent = `Users Followers Count ${followers}`
+
+  const followeringg = document.createElement('p')
+  followeringg.textContent = `Users Following Count ${following}`
+
+  const bios = document.createElement('p')
+  bios.textContent = `Users Bio: ${bio}`
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(names)
+  cardInfo.appendChild(logins)
+  cardInfo.appendChild(locations)
+  cardInfo.appendChild(profile)
+  cardInfo.appendChild(followerss)
+  cardInfo.appendChild(followeringg)
+  cardInfo.appendChild(bios)
+
+  return card;
+}
+
+
+  
