@@ -1,9 +1,17 @@
+import axios from 'axios'
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+const container = document.querySelector('.cards')
 
+axios.get('https://api.github.com/users/Jbain912')
+.then((res)=> {
+  const myData = res.data
+    container.appendChild(cardMaker(myData))
+}
+)
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +36,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +66,58 @@ const followersArray = [];
     luishrd
     bigknell
 */
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell']
+
+  followersArray.forEach(data => {
+    axios.get(`https://api.github.com/users/${data}`)
+    .then((res) => {
+      const newData = res.data
+      container.appendChild(cardMaker(newData))
+
+    })
+
+  })
+
+  const entryPoint = document.querySelector('div.cards')
+    function cardMaker({avatar_url, name, login, location, html_url, followers, following, bio}) {
+      const card = document.createElement('div')
+      const avatar = document.createElement('img')
+      const cardInfo = document.createElement('div')
+      const fullName = document.createElement('h3')
+      const username = document.createElement('p')
+      const locations = document.createElement('p')
+      const profile = document.createElement('p')
+      const address = document.createElement('a')
+      const followerCount = document.createElement('p')
+      const followingCount = document.createElement('p')
+      const fullBio = document.createElement('p')
+
+      card.classList.add('card')
+      avatar.src = avatar_url
+      cardInfo.classList.add('card-info')
+      fullName.classList.add('name')
+      fullName.textContent = `${name}`
+      username.classList.add('username')
+      username.textContent = `${login}`
+      locations.textContent = `Location: ${location}`
+      profile.textContent = `Profile:`
+      address.src = html_url
+      followerCount.textContent = `Followers: ${followers}`
+      followingCount.textContent = `Following: ${following}`
+      fullBio.textContent = `${bio}`
+
+      card.appendChild(avatar)
+      card.appendChild(cardInfo)
+      cardInfo.appendChild(fullName)
+      cardInfo.appendChild(username)
+      cardInfo.appendChild(locations)
+      cardInfo.appendChild(profile)
+      profile.appendChild(address)
+      cardInfo.appendChild(followerCount)
+      cardInfo.appendChild(followingCount)
+      cardInfo.appendChild(fullBio)
+
+
+
+      return card
+    }
