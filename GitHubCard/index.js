@@ -3,6 +3,13 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+axios.get('https://api.github.com/users/TaylorCoder22')
+.then((res) => {
+  const user = githubUser(res.data)
+  const cards = document.querySelector('.cards')
+  cards.appendChild(user)
+})
+.catch((err) => console.log(err))
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +35,19 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'TaylorCoder22'];
+
+followersArray.forEach(follower => {
+  axios.get('https://api.github.com/users/${follower}')
+  .then((res) => {
+    const user = githubUser(res.data)
+    const cards = document.querySelector('.cards')
+    cards.appendChild(user)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +77,44 @@ const followersArray = [];
     luishrd
     bigknell
 */
+function githubUser({user}) {
+  const card = document.createElement('div')
+  const image = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const username = document.createElement('p')
+  const location = document.createElement('p')
+  const profile = document.createElement('p')
+  const profileLink = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bio = document.createElement('p')
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(username)
+  cardInfo.appendChild(location)
+  cardInfo.appendChild(profile)
+  profile.appendChild(profileLink)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+
+  image.src = user['avatar_url']
+  name.textContent = user['name']
+  username.textContent = user['login']
+  location.textContent = user['location']
+  profileLink.textContent = user['html_url']
+  profileLink.href = user['html_url']
+  profile.textContent = 'Profile: ${profileLink.textContent}'
+  followers.textContent = 'Followers: ${user["followers"]}'
+  following.textContent = 'Following: ${user["following]"}'
+  bio.textContent = user['bio']
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  username.classList.add('username')
+
+  return card;
+}
