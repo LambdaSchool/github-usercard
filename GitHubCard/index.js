@@ -1,3 +1,4 @@
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
@@ -16,6 +17,33 @@
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+import axios from 'axios'
+import { forEach } from 'lodash'
+
+
+
+
+
+
+
+  axios.get(`https://api.github.com/users/tetondan`)
+  .then(res =>{
+      const profileCard = gitCardMaker(res.data)
+      return profileCard
+  })
+  .then(profileCard =>{
+  infoCards.appendChild(profileCard)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+  .finally(() => {
+    console.log('done')
+  })
+
+
+
+
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -28,7 +56,13 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["dustinmyers", "justsml", "luishrd", "bigknell"];
+
+forEach(elem =>{
+  const profileCard = followersArray + profileCard;
+})
+
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +83,59 @@ const followersArray = [];
       </div>
     </div>
 */
+
+const infoCards = document.querySelector('.cards')
+
+function gitCardMaker(obj){
+  const profileCard = document.createElement('div')
+  const image = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const nameOfUser = document.createElement('h3')
+  const loginName = document.createElement('p')
+  const userLocation = document.createElement('p')
+  const profile = document.createElement('p')
+  const addressLink = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bio = document.createElement('p')
+
+image.src = obj['avatar_url']
+nameOfUser.textContent = obj["name"]
+loginName.textContent = obj['login']
+userLocation.textContent = `Location: ${obj["location"]}`
+addressLink.textContent =  'Profile: ' + addressLink;
+addressLink.href = obj['html_url']
+addressLink.innerHTML = "Github"
+profile.appendChild(addressLink)
+followers.textContent = "Followers: " + obj["followers"]
+following.textContent = "Following: " + obj["following"]
+bio.textContent = "Bio: " + obj["bio"]
+
+console.log(profileCard)
+
+profileCard.classList.add('card')
+cardInfo.classList.add('card-info')
+image.classList.add('img')
+nameOfUser.classList.add('name')
+loginName.classList.add('username')
+
+
+profileCard.appendChild(image)
+profileCard.appendChild(cardInfo)
+cardInfo.appendChild(nameOfUser)
+cardInfo.appendChild(loginName)
+cardInfo.appendChild(userLocation)
+cardInfo.appendChild(profile)
+profile.appendChild(addressLink)
+cardInfo.appendChild(followers)
+cardInfo.appendChild(following)
+cardInfo.appendChild(bio)
+
+
+
+return profileCard
+}
+
 
 /*
   List of LS Instructors Github username's:
